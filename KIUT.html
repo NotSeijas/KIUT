@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page de Categorías</title>
+    <style>
+        /* Estilos CSS */
+        body {
+            font-family: "Times New Roman", serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #90caf9, #ffccbc); /* Fondo degradado azul y naranja */
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .section {
+            display: none;
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #ff7043; /* Naranja */
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #ffcc80; /* Amarillo suave */
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #ff7043; /* Naranja */
+        }
+
+        input, textarea {
+            display: block;
+            width: 90%;
+            margin: 15px auto;
+            padding: 15px;
+            border: 2px solid #ffcc80; /* Amarillo */
+            border-radius: 15px;
+            font-size: 1.2em;
+            transition: border 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #ff7043; /* Naranja */
+        }
+
+        .menu-icons {
+    display: grid; /* Cambiar a grid layout */
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas iguales */
+    gap: 20px; /* Espaciado entre elementos */
+    width: 100%; /* Asegurar que ocupe el ancho del contenedor */
+    justify-items: center; /* Centrar los elementos en cada celda */
+    margin-top: 30px; /* Mantener espacio superior */
+}
+
+.menu-icons div {
+    cursor: pointer;
+    text-align: center;
+    width: auto; /* Ajustar automáticamente al contenido */
+}
+
+        .menu-icons img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-icons img:hover {
+            transform: scale(1.1);
+        }
+
+        .file-preview {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .file-item {
+            position: relative;
+            border: 2px solid #ff7043; /* Naranja */
+            border-radius: 25px;
+            padding: 20px;
+            text-align: center;
+            background: #fffde7; /* Amarillo claro */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+        }
+
+        .file-item img, .file-item video, .file-item audio {
+            max-width: 120px;
+            max-height: 120px;
+        }
+
+        .file-item button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #d32f2f; /* Rojo */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.8em; /* Tamaño de la X reducido */
+            padding: 5px;
+        }
+
+        .profile-header {
+            position: absolute;
+            top: 30px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-header img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #ff7043; /* Resaltar con borde */
+        }
+
+        .profile-header span {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #ff7043;
+        }
+
+        /* Logo centralizado con bordes redondeados */
+        .logo {
+            max-width: 250px;
+            border-radius: 50%; /* Bordes redondeados */
+            margin: 30px auto; /* Centrado */
+            display: block;
+            border: 5px solid #ff7043; /* Borde de logo */
+            padding: 10px;
+        }
+
+        /* Centrado del contenido */
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .calendar-date {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #ff7043;
+    margin-top: 20px;
+}
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Logo de la Página -->
+        <img id="page-logo" src="image.png" alt="BIENVENIDO" class="logo">
+        <input type="file" id="logo-upload" onchange="uploadLogo()" style="display: none;">
+
+        <!-- Sección de Registro -->
+        <div id="register-section" class="section active">
+            <h1>Registro</h1>
+            <input type="text" id="register-username" placeholder="Crea tu usuario">
+            <input type="password" id="register-password" placeholder="Crea tu contraseña">
+            <label>Sube tu foto de perfil:</label>
+            <input type="file" id="profile-picture" accept="image/*" required>
+            <label>Sube el logo de la página:</label>
+            <input type="file" id="page-logo-upload" accept="image/*" required>
+            <button onclick="registerUser()">Registrarse</button>
+        </div>
+
+        <!-- Sección de Login -->
+        <div id="login-section" class="section hidden">
+            <h1>Iniciar Sesión</h1>
+            <input type="text" id="login-username" placeholder="Ingrese su usuario">
+            <input type="password" id="login-password" placeholder="Ingrese su contraseña">
+            <button onclick="loginUser()">Ingresar</button>
+        </div>
+
+        <!-- Menú Principal -->
+        <div id="menu-section" class="section hidden">
+            <div class="profile-header">
+                <img id="menu-profile-picture" src="" alt="Foto de perfil">
+                <span id="menu-username"></span>
+            </div>
+            <h1>Menú Principal</h1>
+            <div class="menu-icons">
+                <div onclick="navigateTo('photos')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/335/335954.png" alt="Fotos">
+                    <p>Fotos</p>
+                </div>
+                <div onclick="navigateTo('videos')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4404/4404094.png" alt="Videos">
+                    <p>Videos</p>
+                </div>
+                <div onclick="navigateTo('music')">
+                    <img src="https://images.vexels.com/content/184267/preview/music-beamed-notes-icon-92369a.png" alt="Música">
+                    <p>Música</p>
+                </div>
+                <div onclick="navigateTo('notes')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1484/1484948.png" alt="Notas">
+                    <p>Notas</p>
+                </div>
+                <div onclick="navigateTo('calendar')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3143/3143484.png" alt="Calendario">
+                    <p>Calendario</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Secciones de Categorías -->
+        <div id="photos-section" class="section hidden">
+            <h1>Fotos</h1>
+            <input type="file" accept="image/*" onchange="handleFileUpload(event, 'photos')">
+            <div class="file-preview" id="photos-preview"></div>
+            <button onclick="goToMenu()">Volver al Menú</button>
+        </div>
+        <div id="videos-section" class="section hidden">
+            <h1>Videos</h1>
+            <input type="file" accept="video/*" onchange="handleFileUpload(event, 'videos')">
+            <div class="file-preview" id="videos-preview"></div>
+            <button onclick="goToMenu()">Volver al Menú</button>
+        </div>
+        <div id="music-section" class="section hidden">
+            <h1>Música</h1>
+            <input type="file" accept="audio/*" onchange="handleFileUpload(event, 'music')">
+            <div class="file-preview" id="music-preview"></div>
+            <button onclick="goToMenu()">Volver al Menú</button>
+        </div>
+        <div id="notes-section" class="section hidden">
+            <h1>Notas</h1>
+            <textarea id="notes-area" placeholder="Escribe tu nota..."></textarea>
+            <button onclick="saveNote()">Guardar Nota</button>
+            <div class="file-preview" id="notes-preview"></div>
+            <button onclick="goToMenu()">Volver al Menú</button>
+        </div>
+        <div id="calendar-section" class="section hidden">
+            <h1>Calendario</h1>
+            <p class="calendar-date" id="calendar-date"></p>
+            <button onclick="goToMenu()">Volver al Menú</button>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        const users = {};
+
+        function registerUser() {
+            const username = document.getElementById("register-username").value;
+            const password = document.getElementById("register-password").value;
+            const profilePicture = document.getElementById("profile-picture").files[0];
+            const pageLogo = document.getElementById("page-logo-upload").files[0];
+
+            // Validar que se haya subido la foto de perfil
+            if (!profilePicture) {
+                alert("Por favor, sube tu foto de perfil.");
+                return;
+            }
+
+            // Guardar los datos del usuario
+            if (username && password && profilePicture) {
+                users[username] = {
+                    password,
+                    profileUrl: URL.createObjectURL(profilePicture),
+                    pageLogoUrl: URL.createObjectURL(pageLogo)
+                };
+                alert("Registro exitoso. Ahora inicia sesión.");
+                switchSection("register-section", "login-section");
+            } else {
+                alert("Por favor, ingresa un nombre de usuario, contraseña y foto de perfil.");
+            }
+        }
+
+        function loginUser() {
+            const username = document.getElementById("login-username").value;
+            const password = document.getElementById("login-password").value;
+
+            if (users[username] && users[username].password === password) {
+                currentUser = username;
+                document.getElementById("menu-username").innerText = username;
+                document.getElementById("menu-profile-picture").src = users[username].profileUrl;
+                document.getElementById("page-logo").src = users[username].pageLogoUrl;
+                switchSection("login-section", "menu-section");
+            } else {
+                alert("Usuario o contraseña incorrectos.");
+            }
+        }
+
+        function switchSection(hide, show) {
+            document.getElementById(hide).classList.remove("active");
+            document.getElementById(hide).classList.add("hidden");
+            document.getElementById(show).classList.add("active");
+        }
+
+        function navigateTo(category) {
+            switchSection("menu-section", `${category}-section`);
+        }
+        function updateCalendar() {
+    const date = new Date();
+    const options = { day: 'numeric', month: 'long' };
+    document.getElementById("calendar-date").textContent = date.toLocaleDateString("es-ES", options);
+}
+
+function navigateTo(category) {
+    if (category === "calendar") updateCalendar();
+    switchSection("menu-section", `${category}-section`);
+}
+
+        function goToMenu() {
+            const activeSection = document.querySelector(".section.active");
+            activeSection.classList.remove("active");
+            activeSection.classList.add("hidden");
+            document.getElementById("menu-section").classList.add("active");
+        }
+
+        function handleFileUpload(event, category) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById(`${category}-preview`);
+
+            Array.from(files).forEach(file => {
+                const fileUrl = URL.createObjectURL(file);
+
+                const fileItem = document.createElement("div");
+                fileItem.className = "file-item";
+
+                if (category === "photos") {
+                    const img = document.createElement("img");
+                    img.src = fileUrl;
+                    fileItem.appendChild(img);
+                } else if (category === "videos") {
+                    const video = document.createElement("video");
+                    video.controls = true;
+                    video.src = fileUrl;
+                    fileItem.appendChild(video);
+                } else if (category === "music") {
+                    const audio = document.createElement("audio");
+                    audio.controls = true;
+                    audio.src = fileUrl;
+                    fileItem.appendChild(audio);
+                }
+
+                const deleteButton = document.createElement("button");
+                deleteButton.innerText = "X";
+                deleteButton.onclick = () => {
+                    previewContainer.removeChild(fileItem);
+                };
+
+                fileItem.appendChild(deleteButton);
+                previewContainer.appendChild(fileItem);
+            });
+        }
+
+        function saveNote() {
+            const noteText = document.getElementById("notes-area").value;
+            const previewContainer = document.getElementById("notes-preview");
+
+            if (noteText.trim() !== "") {
+                const noteItem = document.createElement("div");
+                noteItem.className = "file-item";
+                noteItem.innerText = noteText;
+
+                const deleteButton = document.createElement("button");
+                deleteButton.innerText = "X";
+                deleteButton.onclick = () => {
+                    previewContainer.removeChild(noteItem);
+                };
+
+                noteItem.appendChild(deleteButton);
+                previewContainer.appendChild(noteItem);
+
+                document.getElementById("notes-area").value = "";
+            } else {
+                alert("La nota está vacía.");
+            }
+        }
+
+        function uploadLogo() {
+            const logoFile = document.getElementById("logo-upload").files[0];
+            if (logoFile) {
+                const logoUrl = URL.createObjectURL(logoFile);
+                document.getElementById("page-logo").src = logoUrl;
+            }
+        }
+    </script>
+</body>
+</html>
